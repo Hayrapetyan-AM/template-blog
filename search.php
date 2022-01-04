@@ -1,7 +1,3 @@
-<?php
-
-    if (!isset($_GET['category'])) $_GET['category'] = "PHP";
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -19,10 +15,10 @@
     <body class="bg-dark">
 
 <?php 
-    require_once $_SERVER['DOCUMENT_ROOT'] . ("/assets/navbar.php");
-    require_once $_SERVER['DOCUMENT_ROOT'] . ("/assets/header.php");
-    require_once $_SERVER['DOCUMENT_ROOT'] . ("/assets/content.php");
-    require_once $_SERVER['DOCUMENT_ROOT'] . ("/assets/footer.php");
+    require_once $_SERVER['DOCUMENT_ROOT'] .("/assets/navbar.php");
+    require_once $_SERVER['DOCUMENT_ROOT'] .("/assets/header.php");
+    require_once $_SERVER['DOCUMENT_ROOT'] .("/assets/search/content.php");
+    require_once $_SERVER['DOCUMENT_ROOT'] .("/assets/footer.php");
 ?>
 
         <!-- Bootstrap core JS-->

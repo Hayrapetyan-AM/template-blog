@@ -11,9 +11,8 @@
 			private $pageno;
 			private $pages;
 			private $table;
-			function __construct($dbConn, $alimit, $atable)
+			function __construct($alimit, $atable)
 			{
-				$this->db = $dbConn;
 				$this->limit = $alimit;
 				$this->table = $atable;
 				self::config();
@@ -26,7 +25,8 @@
 public function Paginate() 
 		{ 
 				try {
-						$query = $this->db->query("SELECT * FROM ".$this->table." LIMIT ".$this->limit." OFFSET ".$this->offset." ");
+						$query = $this->db->prepare("SELECT * FROM ".$this->table." WHERE status = 'default' AND category = ? LIMIT ".$this->limit." OFFSET ".$this->offset." ");
+						$query->execute([$_GET['category']]);
 					} catch (Exception $e) {
 					echo "Error ". $e->getMessage();
 				}
@@ -39,24 +39,16 @@ public function Paginate()
    							<div class="col-lg-6">
                             <!-- Blog post-->
                             <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
+                                <a href="#!"><img class="card-img-top" src="<?=$row->tumbnail ?>" alt="..." width="700" height="200"></a>
                                 <div class="card-body">
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <a class="btn btn-success" href="#!">Read more →</a>
+                                    <div class="small text-muted"><?=substr($row->create_date, 0, 16); ?></div>
+                                    <h2 class="card-title h4"><?=$row->title ?></h2>
+                                    <p class="card-text"><?=$row->description ?></p>
+                                    
+                                    	<a class="btn btn-dark" href="post.php?id=<?=$row->id ?>&category=<?=$row->category ?>">Read more →</a>
+                                    
                                 </div>
-                            </div>
-                            <!-- Blog post-->
-                            <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                                <div class="card-body">
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <a class="btn btn-success" href="#!">Read more →</a>
-                                </div>
-                            </div>
+                            </div>   
                         </div>
 						<?
 					}
@@ -98,6 +90,8 @@ public function Paginate()
 
 		private function config()
 		{
+			require $_SERVER['DOCUMENT_ROOT'] . ("/classes/dbConn.php");
+			$this->db = $db;
 					try {
 				$total_query = $this->db->query("SELECT COUNT(*) FROM ".$this->table."");
 				$total_query = $total_query->fetch(PDO::FETCH_ASSOC);
